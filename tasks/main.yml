@@ -1,0 +1,50 @@
+---
+- name: create user group (unix)
+  group:
+    name: "{{ item.name }}" 
+    state: present
+  with_items: 
+    - "{{ system_users}}"
+  when:
+    - system_users is defined
+    - item.create_group is defined and item.create_group
+    - item.state == 'present'
+
+- name: create/delete users
+  user:
+    name: "{{ item.name }}"
+    comment: "{{ item.comment }}"
+    home: "{{ item.home }}"
+    shell: "{{ item.shell }}"
+    force: "{{ item.force }}"
+    group: "{{ item.name if item.create_group is defined and item.create_group }}"
+    groups: "{{ item.groups }}"
+    state: "{{ item.state | default('present') }}"
+  with_items: 
+    - "{{ system_users }}"
+  when:
+    - system_users|length > 0
+
+- name: create authorized_keys
+  authorized_key:
+    user: "{{ item.name }}"
+    key: "{{ item.authorized_keys }}"
+    validate_certs: no
+    state: "present"
+  with_items: 
+    - "{{ system_users }}"
+  when:
+    - item.state == 'present'
+    - item.authorized_keys is defined
+
+- name: delete unix groups
+  group:
+    name: "{{ item.name }}" 
+    state: absent
+  with_items: 
+    - "{{ system_users}}"
+  when:
+    - item.create_group is defined and item.create_group
+    - item.state == 'absent'
+
+
