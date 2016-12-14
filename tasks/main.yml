@@ -1,9 +1,9 @@
 ---
 - name: create user group (unix)
   group:
-    name: "{{ item.name }}" 
+    name: "{{ item.name }}"
     state: present
-  with_items: 
+  with_items:
     - "{{ system_users}}"
   when:
     - system_users is defined
@@ -20,7 +20,7 @@
     group: "{{ item.name if item.create_group is defined and item.create_group }}"
     groups: "{{ item.groups }}"
     state: "{{ item.state | default('present') }}"
-  with_items: 
+  with_items:
     - "{{ system_users }}"
   when:
     - system_users|length > 0
@@ -31,17 +31,18 @@
     key: "{{ item.authorized_keys }}"
     validate_certs: no
     state: "present"
-  with_items: 
+  with_items:
     - "{{ system_users }}"
   when:
     - item.state == 'present'
     - item.authorized_keys is defined
+    - not ansible_check_mode
 
 - name: delete unix groups
   group:
-    name: "{{ item.name }}" 
+    name: "{{ item.name }}"
     state: absent
-  with_items: 
+  with_items:
     - "{{ system_users}}"
   when:
     - item.create_group is defined and item.create_group
