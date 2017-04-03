@@ -13,7 +13,7 @@
     dest: /etc/sudoers.d/wheel-nopasswd.conf
     owner: root
     group: root
-    mode: 0644
+    mode: 0440
   when:
     - role_usermanager_wheel_allow_nopasswd is defined
     - role_usermanager_wheel_allow_nopasswd
