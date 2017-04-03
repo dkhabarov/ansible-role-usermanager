@@ -2,6 +2,7 @@ role_usermanager_default_shell: /bin/bash
 role_usermanager_system_user: no
 role_usermanager_create_user_group: yes
 role_usermanager_unix_groups: "sudo,adm"
+role_usermanager_wheel_allow_nopasswd: yes
 
 system_users:
 #  - name: d.khabarov

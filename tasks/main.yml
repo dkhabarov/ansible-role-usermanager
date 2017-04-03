@@ -1,4 +1,31 @@
 ---
+- name: create wheel group when not exists
+  group:
+    name: "wheel"
+    state: present
+  when:
+    - role_usermanager_wheel_allow_nopasswd is defined
+    - role_usermanager_wheel_allow_nopasswd
+
+- name: install sudoers
+  template:
+    src: etc/sudoers.d/wheel-nopasswd.conf
+    dest: /etc/sudoers.d/wheel-nopasswd.conf
+    owner: root
+    group: root
+    mode: 0644
+  when:
+    - role_usermanager_wheel_allow_nopasswd is defined
+    - role_usermanager_wheel_allow_nopasswd
+
+- name: remove wheel nopasswd, if disabled
+  file:
+    path: /var/tmp/deleteme
+    state: absent
+  when: 
+    - role_usermanager_wheel_allow_nopasswd is defined
+    - not role_usermanager_wheel_allow_nopasswd
+
 - name: create user group (unix)
   group:
     name: "{{ item.name }}"
