@@ -10,7 +10,7 @@
 - name: install sudoers
   template:
     src: etc/sudoers.d/wheel-nopasswd.conf
-    dest: /etc/sudoers.d/wheel-nopasswd.conf
+    dest: /etc/sudoers.d/wheel-nopasswd
     owner: root
     group: root
     mode: 0440
