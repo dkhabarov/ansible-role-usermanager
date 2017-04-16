@@ -20,7 +20,7 @@
 
 - name: remove wheel nopasswd, if disabled
   file:
-    path: /var/tmp/deleteme
+    path: /etc/sudoers.d/wheel-nopasswd
     state: absent
   when: 
     - role_usermanager_wheel_allow_nopasswd is defined
